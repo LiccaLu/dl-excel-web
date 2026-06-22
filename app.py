@@ -52,6 +52,14 @@ def process_excel(file):
     for col in comp:
         df[col] = df[col].replace(company_size_map)
 
+    #服務期間
+    worktime = ['1服務期間', '2服務期間 ', '3服務期間 ', '4服務期間 ', '5服務期間 ']
+    for col in worktime:
+        idx2 = df.columns.get_loc(col)
+        split = df[col].astype(str).str.split(r'[~～]', expand=True)
+        df.insert(idx2 + 1, f'{col}_結束', split[1].str.strip())
+        df[col] = split[0].str.strip()
+        
     return df
 
 
