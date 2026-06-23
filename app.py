@@ -86,13 +86,7 @@ def process_excel(file):
         df.loc[i, '血型'] = '□A    □B    □O    ■AB'
 
     #原住民身份
-    for i, row in df.iterrows():
-      if row['是否有原住民身分？'] == '是':
-        df.loc[i, '是否有原住民身分？'] = '■是    □否'
-      elif row['是否有原住民身分？'] == '否':
-        df.loc[i, '是否有原住民身分？'] = '□是    ■否'
-      else:
-        df.loc[i, '是否有原住民身分？'] = '□是    □否'
+    df['是否有原住民身分？'] = np.where(df[col].astype(str).str.startswith('是'),'■是    □否','□是    ■否')
 
     #兵歷
     df['兵歷'] = np.where(df['兵歷'] == '役畢','■役畢    □免役','□役畢    ■免役')
