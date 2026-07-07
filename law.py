@@ -138,35 +138,35 @@ def scrape_laws(start_date, end_date):
     law_df["行政院公報連結"] = source_links
 
     # 找網頁文字版連結
+# 找網頁文字版連結
     web_text_links = []
-
+    
     for _, row in law_df.iterrows():
         gazette_url = row["行政院公報連結"]
-
+    
         if not gazette_url:
             web_text_links.append("")
             continue
-
+    
         web_text_url = ""
-
+    
         try:
-            response = requests.get(gazette_url, verify=False, timeout=10)
+            response = requests.get(gazette_url, verify=False, timeout=8)
             response.encoding = "utf-8"
-
             soup = BeautifulSoup(response.text, "html.parser")
-
+    
             for a in soup.find_all("a"):
-                text = a.get_text(strip=True)
-
-                if "網頁文字" in text or "文字版" in text or "eguploadpubWrapper" in href:
-                    web_text_url = urljoin(gazette_url, a.get("href", ""))
+                href = a.get("href", "")
+    
+                if "eguploadpubWrapper" in href:
+                    web_text_url = urljoin(gazette_url, href)
                     break
-
+    
         except Exception:
             web_text_url = ""
-
+    
         web_text_links.append(web_text_url)
-
+    
     law_df["網頁文字版連結"] = web_text_links
 
     return law_df
