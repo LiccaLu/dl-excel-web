@@ -137,8 +137,61 @@ def scrape_laws(start_date, end_date):
 
     law_df["行政院公報連結"] = source_links
 
+    def get_law_name(detail_url):
+    try:
+        response = requests.get(detail_url, verify=False, timeout=8)
+        response.encoding = "utf-8"
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        text = soup.get_text("\n", strip=True).split("\n")
+
+        for i, line in enumerate(text):
+            if "法規名稱" in line and i + 1 < len(text):
+                return text[i + 1]
+
+    except Exception:
+        return ""
+
+    return ""
+
+def search_law_history(law_name):
+    if not law_name:
+        return "", 0
+
+    search_url = base_url + "/SearchResult.aspx"
+
+    try:
+        response = requests.get(
+            search_url,
+            params={"keyword": law_name},
+            verify=False,
+            timeout=8
+        )
+        response.encoding = "utf-8"
+        soup = BeautifulSoup(response.text, "html.parser")
+
+        dates = []
+
+        for row in soup.find_all("tr"):
+            cols = row.find_all("td")
+
+            if len(cols) >= 4:
+                category = cols[1].get_text(strip=True)
+                title = cols[2].get_text(strip=True)
+                date_text = cols[3].get_text(strip=True)
+
+                if law_name in title or "勞動部令" in title:
+                    dates.append(date_text)
+
+        if dates:
+            return dates[0], len(dates)
+
+    except Exception:
+        return "", 0
+
+    return "", 0
+
     # 找網頁文字版連結
-# 找網頁文字版連結
     web_text_links = []
     
     for _, row in law_df.iterrows():
@@ -193,6 +246,24 @@ def scrape_laws(start_date, end_date):
         history_dates.append(last_date)
     
     law_df["上次修改日期"] = history_dates
+
+    law_names = []
+    last_dates = []
+    history_counts = []
+    
+    for _, row in law_df.iterrows():
+        detail_url = row["公告連結"]
+    
+        law_name = get_law_name(detail_url)
+        last_date, count = search_law_history(law_name)
+    
+        law_names.append(law_name)
+        last_dates.append(last_date)
+        history_counts.append(count)
+    
+    law_df["法規名稱"] = law_names
+    law_df["上次修改日期"] = last_dates
+    law_df["歷史筆數"] = history_counts
 
     return law_df
 
