@@ -150,7 +150,7 @@ def scrape_laws(start_date, end_date):
         web_text_url = ""
 
         try:
-            response = requests.get(gazette_url, verify=False, timeout=20)
+            response = requests.get(gazette_url, verify=False, timeout=10)
             response.encoding = "utf-8"
 
             soup = BeautifulSoup(response.text, "html.parser")
@@ -158,7 +158,7 @@ def scrape_laws(start_date, end_date):
             for a in soup.find_all("a"):
                 text = a.get_text(strip=True)
 
-                if "網頁文字版" in text:
+                if "網頁文字" in text or "文字版" in text or "eguploadpubWrapper" in href:
                     web_text_url = urljoin(gazette_url, a.get("href", ""))
                     break
 
