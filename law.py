@@ -45,10 +45,16 @@ def search_law_history(law_name):
     if not law_name:
         return "", 0
 
-    search_url = base_url + "/SearchResult.aspx?keyword=" + quote(law_name)
+    search_url = base_url + "/index.aspx"
 
     try:
-        response = requests.get(search_url, verify=False, timeout=8)
+        response = requests.get(
+            search_url,
+            params={"ctl00$txtGlobalSearchOut": law_name},
+            verify=False,
+            timeout=8
+        )
+
         response.encoding = "utf-8"
         soup = BeautifulSoup(response.text, "html.parser")
 
@@ -62,7 +68,7 @@ def search_law_history(law_name):
                 title = cols[2].get_text(strip=True)
                 date_text = cols[3].get_text(strip=True)
 
-                if law_name in title:
+                if category == "解釋令":
                     dates.append(date_text)
 
         if dates:
