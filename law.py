@@ -184,7 +184,7 @@ def scrape_laws(start_date, end_date):
                 for a in soup.find_all("a"):
                     href = a.get("href", "")
 
-                    if "網頁文字" in text or "文字版" in text or "eguploadpubWrapper" in href:
+                    if "網頁文字版" in text or "文字版" in text or "eguploadpubWrapper" in href:
                         web_text_url = urljoin(source_url, href)
                         break
 
