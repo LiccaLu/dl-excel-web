@@ -188,7 +188,56 @@ if st.button("開始整理"):
     else:
         st.success(f"整理完成，共 {len(df)} 筆行政規則")
 
-        st.dataframe(df, use_container_width=True)
+        gb = GridOptionsBuilder.from_dataframe(df)
+
+        gb.configure_column("公告連結", cellRenderer="""
+        class UrlCellRenderer {
+            init(params) {
+                this.eGui = document.createElement('a');
+                this.eGui.innerText = '開啟';
+                this.eGui.href = params.value;
+                this.eGui.target = '_blank';
+            }
+            getGui() {
+                return this.eGui;
+            }
+        }
+        """)
+        
+        gb.configure_column("行政院公報連結", cellRenderer="""
+        class UrlCellRenderer {
+            init(params) {
+                this.eGui = document.createElement('a');
+                this.eGui.innerText = '開啟';
+                this.eGui.href = params.value;
+                this.eGui.target = '_blank';
+            }
+            getGui() {
+                return this.eGui;
+            }
+        }
+        """)
+        
+        gb.configure_column("網頁文字版連結", cellRenderer="""
+        class UrlCellRenderer {
+            init(params) {
+                this.eGui = document.createElement('a');
+                this.eGui.innerText = '開啟';
+                this.eGui.href = params.value;
+                this.eGui.target = '_blank';
+            }
+            getGui() {
+                return this.eGui;
+            }
+        }
+        """)
+        
+        AgGrid(
+            df,
+            gridOptions=gb.build(),
+            allow_unsafe_jscode=True,
+            fit_columns_on_grid_load=True,
+        )
 
         output = BytesIO()
 
