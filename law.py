@@ -99,15 +99,7 @@ def enrich_one(row):
                 if not href:
                     continue
 
-                if (
-                    "網頁文字版" in text
-                    or "文字版" in text
-                    or "eguploadpubWrapper" in href
-                    or "fileView" in href
-                    or "fileDownload" in href
-                ):
-                    web_text_url = urljoin(source_url, href)
-                    break
+                if "網頁文字版" in text or "文字版" in text or "eguploadpubWrapper" in href: web_text_url = urljoin(source_url, href) break
 
     except Exception:
         pass
