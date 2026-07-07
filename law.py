@@ -169,6 +169,31 @@ def scrape_laws(start_date, end_date):
     
     law_df["網頁文字版連結"] = web_text_links
 
+    history_dates = []
+
+    for _, row in law_df.iterrows():
+        text_url = row["網頁文字版連結"]
+        last_date = ""
+    
+        if text_url:
+            try:
+                response = requests.get(text_url, verify=False, timeout=8)
+                response.encoding = "utf-8"
+                soup = BeautifulSoup(response.text, "html.parser")
+                text = soup.get_text("\n", strip=True)
+    
+                matches = re.findall(r"中華民國(\d+年\d+月\d+日)", text)
+    
+                if matches:
+                    last_date = matches[-1]   # 通常最後一個是最近一次修正/發布日期
+    
+            except Exception:
+                last_date = ""
+    
+        history_dates.append(last_date)
+    
+    law_df["上次修改日期"] = history_dates
+
     return law_df
 
 
