@@ -71,8 +71,11 @@ div[data-testid="stAlert"] {
 
 BASE_URL = "https://laws.mol.gov.tw"
 HEADERS = {
-    "User-Agent": "Mozilla/5.0",
-    "Referer": "https://laws.mol.gov.tw/"
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "zh-TW,zh;q=0.9,en;q=0.8",
+    "Referer": "https://laws.mol.gov.tw/",
+    "Connection": "close",
 }
 
 
