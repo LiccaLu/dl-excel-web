@@ -378,16 +378,3 @@ if st.button("開始整理"):
             file_name="行政規則公報整理.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         )
-        
-        if st.button("測試勞動部連線"):
-            try:
-                r = requests.get(
-                    "https://laws.mol.gov.tw/index.aspx",
-                    headers=HEADERS,
-                    verify=False,
-                    timeout=90
-                )
-                st.success(f"成功，狀態碼：{r.status_code}")
-                st.write(r.text[:500])
-            except Exception as e:
-                st.error(repr(e))
