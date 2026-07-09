@@ -99,6 +99,10 @@ def get_html(url, timeout=25):
         st.warning(f"無法連線，略過：{url}")
         return None
 
+    except Exception as e:
+        st.error(repr(e))
+        return None
+
 
 def roc_to_date(roc_text):
     y, m, d = roc_text.split(".")
