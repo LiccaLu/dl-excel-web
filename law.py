@@ -69,7 +69,7 @@ div[data-testid="stAlert"] {
 """, unsafe_allow_html=True)
 
 
-BASE_URL = "https://laws.mol.gov.tw/index.aspx"
+BASE_URL = "https://laws.mol.gov.tw"
 HEADERS = {
     "User-Agent": "Mozilla/5.0",
     "Referer": "https://laws.mol.gov.tw/"
