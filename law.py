@@ -82,7 +82,7 @@ HEADERS = {
 connection_failed = False
 
 
-def get_html(url, timeout=90):
+def get_html(url, timeout=8):
     global connection_failed
 
     try:
@@ -98,13 +98,12 @@ def get_html(url, timeout=90):
 
     except requests.exceptions.Timeout:
         connection_failed = True
-        st.warning(f"連線逾時，略過：{url}")
+        st.error("連不上勞動部網站。這不是沒有資料，是目前環境連線逾時。")
         return None
 
     except requests.exceptions.RequestException as e:
         connection_failed = True
-        st.warning(f"無法連線，略過：{url}")
-        st.caption(repr(e))
+        st.error("無法連線到勞動部網站。")
         return None
 
 
@@ -350,23 +349,7 @@ if start_date > end_date:
     st.stop()
 
 
-if st.button("測試勞動部網站連線"):
-    try:
-        r = requests.get(
-            "https://laws.mol.gov.tw/index.aspx",
-            headers=HEADERS,
-            verify=False,
-            timeout=90
-        )
-        r.raise_for_status()
-        st.success(f"連線成功，狀態碼：{r.status_code}")
-        st.code(r.text[:300])
-    except Exception as e:
-        st.error("連線失敗")
-        st.code(repr(e))
-
-
-if st.button("開始整理"):
+if st.button("開始整理", type="primary"):
     connection_failed = False
 
     with st.spinner("正在爬取資料，請稍候..."):
