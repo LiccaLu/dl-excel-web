@@ -212,7 +212,7 @@ def get_text_version_url(gazette_url):
         return ""
 
     try:
-        soup = get_html(gazette_url)\
+        soup = get_html(gazette_url)
         if soup is None:
             return ""
 
