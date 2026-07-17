@@ -123,7 +123,7 @@ def build_price_table() -> Dict[str, Dict[str, Dict[bool, int]]]:
         for bus_type in ["大巴", "中巴"]:
             c1, c2 = st.sidebar.columns(2)
             prices[day_type][bus_type][False] = int(c1.number_input(
-                f"{bus_type}一站",
+                f"{bus_type}停一站",
                 min_value=0,
                 value=DEFAULT_PRICE[day_type][bus_type][False],
                 step=100,
